@@ -1,6 +1,9 @@
 # cmdtaglib
 
-Usage: cmdtaglib <file> [commands]
+A command line application that allows you to interact with `taglib`.
+It allows for easy reading and writing of tags for a script or user.
+
+Usage: `cmdtaglib <file> [commands]`
 
 Commands:
 
