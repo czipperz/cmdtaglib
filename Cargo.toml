@@ -1,0 +1,8 @@
+[package]
+name = "cmdtaglib"
+version = "0.1.0"
+authors = ["Czipperz <czipperz@gmail.com>"]
+
+[dependencies]
+taglib = "0.1.0"
+regex = "0.1"
