@@ -1,3 +1,6 @@
+//! A command line application that allows you to interact with `taglib`.
+//! It allows for easy reading and writing of tags for a script or user.
+
 extern crate taglib;
 use taglib::Tag;
 
@@ -5,30 +8,26 @@ use std::env::args;
 use std::process::exit;
 use std::str::FromStr;
 
-#[derive(Debug)]
-enum CMD {
-    Album,
-    SetAlbum(String),
-    Artist,
-    SetArtist(String),
-    Comment,
-    SetComment(String),
-    Genre,
-    SetGenre(String),
-    Title,
-    SetTitle(String),
-    Track,
-    SetTrack(String),
-    Year,
-    SetYear(String),
-}
-use CMD::*;
+pub mod cmd;
+use cmd::CMD::*;
+
+pub mod help;
+use help::show_help;
+
+pub mod parse;
+use parse::parse_cmd;
 
 fn main() {
     let mut args: Vec<_> = args().collect();
     let progname = args.remove(0);
     if args.len() <= 1 {
-        show_help(&progname);
+        println!("{}",
+                 if args.len() == 0 {
+                     "No arguments were provided"
+                 } else {
+                     "Need to give commands as well as file name"
+                 });
+        show_help(&progname, 1);
     }
     let fname: String = args.remove(0);
     let args = args;
@@ -62,7 +61,18 @@ fn main() {
                                                         match parse_cmd(str, "year") {
                                                             Some(Some(s)) => SetYear(s),
                                                             Some(None) => Year,
-                                                            _ => show_help(&progname),
+                                                            _ => {
+                                                                if str == "help" ||
+                                                                   str == "--help" {
+                                                                    println!("Showing help:");
+                                                                    show_help(&progname, 0);
+                                                                } else {
+                                                                    println!("Unrecognized \
+                                                                              command: {}",
+                                                                             str);
+                                                                    show_help(&progname, 1);
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -109,46 +119,4 @@ fn main() {
             SetYear(s) => tags.set_year(u32::from_str(&s).unwrap()),
         }
     }
-}
-
-// return type means outer Option is for parsed correctly,
-// inner Option is for whether to set or display
-fn parse_cmd(cmd: &String, expected: &str) -> Option<Option<String>> {
-    let mut ci = cmd.chars();
-    let mut ei = expected.chars();
-    loop {
-        match (ci.next(), ei.next()) {
-            (None, None) => return Some(None),
-            (Some('='), None) => return Some(Some(ci.collect())),
-            (Some(c), Some(e)) => {
-                if c == e {
-                    continue;
-                } else {
-                    return None;
-                }
-            }
-            _ => return None,
-        }
-    }
-}
-
-fn show_help(progname: &String) -> ! {
-    println!("Usage: {} <file> [commands]", progname);
-    println!("");
-    println!("Commands:");
-    println!("  album                 Print out the album of the track");
-    println!("  album=ALBUM           Sets the album of the track to ALBUM");
-    println!("  artist                Print out the artist of the track");
-    println!("  artist=ARTIST         Sets the artist of the track to ARTIST");
-    println!("  comment               Print out the comment of the track");
-    println!("  comment=COMMENT       Sets the comment of the track to COMMENT");
-    println!("  genre                 Print out the genre of the track");
-    println!("  genre=GENRE           Sets the genre of the track to GENRE");
-    println!("  title                 Print out the title of the track");
-    println!("  title=TITLE           Sets the title of the track to TITLE");
-    println!("  track                 Print out the track number of the track");
-    println!("  track=TRACK_NUMBER    Sets the track number of the track to TRACK_NUMBER");
-    println!("  year                  Print out the year of the track or 0 if it isn't present");
-    println!("  year=YEAR             Sets the year of the track to YEAR");
-    exit(1);
 }
