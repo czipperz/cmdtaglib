@@ -1,7 +1,5 @@
 extern crate taglib;
 use taglib::Tag;
-extern crate regex;
-use regex::Regex;
 
 use std::env::args;
 use std::process::exit;
