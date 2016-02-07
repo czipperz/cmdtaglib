@@ -36,6 +36,9 @@ fn main() {
     for s in args {
         cmds.push(parse(&s, &progname));
     }
+    // remove mutability
+    let cmds = cmds;
+
     let file = match taglib::File::new(&fname) {
         Ok(f) => f,
         Err(e) => {
