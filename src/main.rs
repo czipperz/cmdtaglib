@@ -30,10 +30,11 @@ fn main() {
         show_help(&progname, 1);
     }
     let fname: String = args.remove(0);
+    // remove mutability
     let args = args;
     let mut cmds = Vec::new();
     for s in args {
-        parse(&s, &progname);
+        cmds.push(parse(&s, &progname));
     }
     let file = match taglib::File::new(&fname) {
         Ok(f) => f,
