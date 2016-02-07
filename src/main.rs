@@ -15,7 +15,7 @@ pub mod help;
 use help::show_help;
 
 pub mod parse;
-use parse::parse_cmd;
+use parse::parse;
 
 fn main() {
     let mut args: Vec<_> = args().collect();
@@ -31,61 +31,9 @@ fn main() {
     }
     let fname: String = args.remove(0);
     let args = args;
-    let it = args.iter();
     let mut cmds = Vec::new();
-    for str in it {
-        cmds.push(match parse_cmd(str, "album") {
-            Some(Some(s)) => SetAlbum(s),
-            Some(None) => Album,
-            _ => {
-                match parse_cmd(str, "artist") {
-                    Some(Some(s)) => SetArtist(s),
-                    Some(None) => Artist,
-                    _ => {
-                        match parse_cmd(str, "comment") {
-                            Some(Some(s)) => SetComment(s),
-                            Some(None) => Comment,
-                            _ => {
-                                match parse_cmd(str, "genre") {
-                                    Some(Some(s)) => SetGenre(s),
-                                    Some(None) => Genre,
-                                    _ => {
-                                        match parse_cmd(str, "title") {
-                                            Some(Some(s)) => SetTitle(s),
-                                            Some(None) => Title,
-                                            _ => {
-                                                match parse_cmd(str, "track") {
-                                                    Some(Some(s)) => SetTrack(s),
-                                                    Some(None) => Track,
-                                                    _ => {
-                                                        match parse_cmd(str, "year") {
-                                                            Some(Some(s)) => SetYear(s),
-                                                            Some(None) => Year,
-                                                            _ => {
-                                                                if str == "help" ||
-                                                                   str == "--help" {
-                                                                    println!("Showing help:");
-                                                                    show_help(&progname, 0);
-                                                                } else {
-                                                                    println!("Unrecognized \
-                                                                              command: {}",
-                                                                             str);
-                                                                    show_help(&progname, 1);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
+    for s in args {
+        parse(&s, &progname);
     }
     let file = match taglib::File::new(&fname) {
         Ok(f) => f,

@@ -1,6 +1,7 @@
 //! Provides the `CMD` enum, representing the different commands that can be invoked.
 
 /// An enum of all the different commands that can be invoked.
+#[derive(PartialEq, Eq, Debug)]
 pub enum CMD {
     /// Display the album name
     Album,

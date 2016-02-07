@@ -1,6 +1,6 @@
 [package]
 name = "cmdtaglib"
-version = "0.1.5"
+version = "0.2.0"
 authors = ["Czipperz <czipperz@gmail.com>"]
 description = "A command line application that allows you to interact with `tablib`"
 keywords = ["taglib", "tag", "tags", "metadata", "media"]
