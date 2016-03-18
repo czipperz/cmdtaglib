@@ -1,6 +1,6 @@
 [package]
 name = "cmdtaglib"
-version = "0.2.2"
+version = "0.3.0"
 authors = ["Czipperz <czipperz@gmail.com>"]
 description = "A command line application that allows you to interact with `tablib`"
 keywords = ["taglib", "tag", "tags", "metadata", "media"]
@@ -10,4 +10,4 @@ homepage = "https://github.com/czipperz/cmdtaglib"
 documentation = "https://czipperz.github.io/cmdtaglib/doc/cmdtaglib/index.html"
 
 [dependencies]
-taglib = "0.1.0"
+taglib = "0.2.0"
